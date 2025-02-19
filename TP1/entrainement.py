@@ -2,8 +2,8 @@ import string
 import numpy as np
 
 def lire_texte():
-    """Lit le texte, enlève la ponctuation et met en minuscule, crée une liste de mots uniques et retourne une matrice de cooccurrence."""
-    file_path = 'TP1/texte.txt'
+    """Lit le texte, enlève la ponctuation et met en minuscule et retourne une matrice de cooccurrence ainsi qu'un dictionnaire."""
+    file_path = 'texte.txt'
     texte = []
 
     try:
@@ -36,4 +36,4 @@ def creer_matrice_cooccurrence(mots):
                 col = mot_a_index[mot_voisin] # Colonne correspondant au mot voisin
                 matrice_cooccurrence[row, col] += 1 # Incrémentation de la matrice de cooccurrence
 
-    return vocabulaire, matrice_cooccurrence
+    return mot_a_index, matrice_cooccurrence

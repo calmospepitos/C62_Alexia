@@ -1,13 +1,21 @@
+import json
 import entrainement as ent
+import prediction as pred
+
+# On charge les stop words
+with open("stopwords-fr.json", "r", encoding="utf-8") as file:
+    stop_words = set(json.load(file))
 
 def main():
-    vocabulaire, matrice_cooccurrence = ent.lire_texte() # Appel de la fonction lire_texte() du module entrainement.py qui retourne le vocabulaire et la matrice de cooccurrence
+    mot_a_index, matrice_cooccurrence = ent.lire_texte()
 
     while True:
-        user_input = input("""Entrez un mot, le nombre de synonymes que vous voulez et la méthode de recherche.
+        user_input = input(
+"""Entrez un mot, le nombre de synonymes que vous voulez et la méthode de recherche (ex: chien 2 0).
 0: produit scalaire, 1: least-squares, 2: city-block.
-Tapez Q pour quitter...
-> """).strip()
+Tapez 'Q' pour quitter...
+> """
+).strip()
 
         if user_input.lower() == 'q':
             print("Fin du programme.")
@@ -17,12 +25,14 @@ Tapez Q pour quitter...
             mot, n, methode = user_input.split()
             n = int(n)
             methode = int(methode)
-            # Affichage des informations pour debug
-            print(f"Mot: {mot}, Nombre de synonymes: {n}, Méthode de recherche: {methode}.\n")
-            print(f"Vocabulaire: {vocabulaire}\nMatrice:\n{matrice_cooccurrence}\n")
+            synonymes = pred.trouver_synonymes(methode, mot, n, mot_a_index, matrice_cooccurrence, stop_words)
 
-            # TODO: Ajouter la fonction de recherche de synonymes ici
-            
+            if synonymes:
+                print(f"Les {n} synonymes de '{mot}' sont:")
+                for i, (synonyme, score) in enumerate(synonymes, 1):
+                    print(f"{i}. {synonyme} -> {score}")
+            else:
+                print("Aucun synonyme trouvé.")
         except ValueError:
             print("Erreur: Veuillez entrer un mot suivi d'un nombre et d'une méthode (ex: chat 5 0)")
             continue

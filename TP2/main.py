@@ -1,70 +1,50 @@
-from sys import argv
-from traceback import print_exc
-from time import perf_counter
+import argparse
 from entrainement import Entrainement
 from prediction import Prediction
+from database import Database
 
-QUITTER = 'q'
-MESSAGE = f'''
-Entrez un mot, le nombre de synonymes que vous voulez et la méthode de calcul,
-i.e. produit scalaire: 0, least-squares: 1, city-block: 2
+def main():
+    parser = argparse.ArgumentParser(description="Système de cooccurrences pour prédire des synonymes.")
 
-Tapez {QUITTER} pour quitter.
+    # Options possibles
+    parser.add_argument("-e", action="store_true", help="Mode entraînement")
+    parser.add_argument("-p", action="store_true", help="Mode prédiction")
+    parser.add_argument("-b", action="store_true", help="Régénérer la base de données")
+    parser.add_argument("-t", type=int, help="Taille de la fenêtre")
+    parser.add_argument("--encodage", type=str, help="Encodage du fichier texte")
+    parser.add_argument("--chemin", type=str, help="Chemin vers le fichier texte")
 
-'''
+    args = parser.parse_args()
 
-def extraire_infos(reponse: str) -> tuple[str, int, int]:
-    mot, nb_syn, methode = reponse.split()
-    nb_syn, methode = int(nb_syn), int(methode)
-    if methode < 0 or methode > 2 or nb_syn < 1:
-        raise Exception("S.V.P. respectez le format des entrées.")
-    return mot, nb_syn, methode
+    if args.b:
+        db = Database()
+        db.regenerer_db()
 
-def imprimer_candidats(candidats: list[str, float]) -> None:
-    print()
-    for mot, score in candidats:
-        print(f'{mot} --> {score:.2f}')
+    elif args.e:
+        if args.t and args.encodage and args.chemin:
+            entrainement = Entrainement(args.t)
+            entrainement.entrainer(chemin=args.chemin, enc=args.encodage)
+        else:
+            print("Erreur : Les options -t, --encodage et --chemin sont obligatoires avec -e")
+    elif args.p:
+        if args.t:
+            cerveau = Entrainement(args.t)
 
-def interface_prediction(cerveau: Entrainement, verbose: int = 0) -> None:
-    while True:
-        reponse = input(MESSAGE)
-        if reponse == QUITTER:
-            break
-        try:
-            mot, nb_syn, methode = extraire_infos(reponse)
-        except Exception as e:
-            print(f'\n{e}')
-            continue
-        try:
-            t = perf_counter()
-            candidats = Prediction.predire(cerveau, mot, nb_syn, methode)
-            if verbose:
-                print(f'\nPrédiction en {perf_counter() - t:.2f} secondes.')
-            imprimer_candidats(candidats)
-        except Exception as e:
-            print(f'\n{e}')
-
-def main() -> int:
-    try:
-        tfen, enc, chemin, verbose = int(argv[1]), argv[2], argv[3], 0
-        if len(argv) > 4:
-            verbose = int(argv[4])
-        
-        t = perf_counter()
-        cerveau = Entrainement(tfen)
-        cerveau.entrainer(chemin, enc)
-        if verbose:
-            print(f'\nEntraînement réalisé en {perf_counter() - t:.2f} secondes.')
-            # print(cerveau.lexique)
-            # print(cerveau.matrice)
+            mot = input("Entrez un mot à rechercher: ")
+            nb_syn = int(input("Nombre de synonymes à afficher: "))
+            methode = int(input("Choisissez une méthode de calcul (0 = produit scalaire, 1 = moindres carrés, 2 = distance de Manhattan): "))
             
-        interface_prediction(cerveau, verbose)
-            
-    except:
-        if verbose:
-            print_exc()
-        return 1
-    return 0
+            try:
+                resultats = Prediction.predire(cerveau, mot, nb_syn, methode)
+                print(f"\nSynonymes de '{mot}':")
+                for syn_mot, score in resultats:
+                    print(f"{syn_mot}: {score}")
+            except Exception as e:
+                print(f"Erreur: {e}")
+        else:
+            print("Erreur : L'option -t est obligatoire avec -p")
+    else:
+        print("Aucune option valide fournie. Utilisez -e, -p ou -b.")
 
-if __name__ == '__main__':
-    quit(main())
+if __name__ == "__main__":
+    main()

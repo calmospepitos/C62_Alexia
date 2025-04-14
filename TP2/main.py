@@ -6,7 +6,7 @@ from database import Database
 def main():
     parser = argparse.ArgumentParser(description="Système de cooccurrences pour prédire des synonymes.")
 
-    # Options possibles
+    # Arguments de ligne de commande
     parser.add_argument("-e", action="store_true", help="Mode entraînement")
     parser.add_argument("-p", action="store_true", help="Mode prédiction")
     parser.add_argument("-b", action="store_true", help="Régénérer la base de données")
@@ -16,35 +16,60 @@ def main():
 
     args = parser.parse_args()
 
+    # Mode régénération
     if args.b:
         db = Database()
         db.regenerer_db()
+        print("✅ Base de données régénérée avec succès.")
 
+    # Mode entraînement
     elif args.e:
         if args.t and args.encodage and args.chemin:
             entrainement = Entrainement(args.t)
             entrainement.entrainer(chemin=args.chemin, enc=args.encodage)
+            print("✅ Entraînement terminé.")
         else:
-            print("Erreur : Les options -t, --encodage et --chemin sont obligatoires avec -e")
+            print("❌ Erreur : -t, --encodage et --chemin sont requis avec -e.")
+
+    # Mode prédiction
     elif args.p:
         if args.t:
-            cerveau = Entrainement(args.t)
+            moteur = Entrainement(args.t)
 
-            mot = input("Entrez un mot à rechercher: ")
-            nb_syn = int(input("Nombre de synonymes à afficher: "))
-            methode = int(input("Choisissez une méthode de calcul (0 = produit scalaire, 1 = moindres carrés, 2 = distance de Manhattan): "))
-            
-            try:
-                resultats = Prediction.predire(cerveau, mot, nb_syn, methode)
-                print(f"\nSynonymes de '{mot}':")
-                for syn_mot, score in resultats:
-                    print(f"{syn_mot}: {score}")
-            except Exception as e:
-                print(f"Erreur: {e}")
+            while True:
+                user_input = input(
+"""Entrez un mot, le nombre de synonymes que vous voulez et la méthode de recherche (ex: chien 2 0).
+0 : produit scalaire, 1 : moindres carrés, 2 : distance de Manhattan.
+Tapez 'Q' pour quitter...
+> """
+                ).strip()
+
+                if user_input.lower() == 'q':
+                    print("👋 Fin du programme.")
+                    break
+
+                try:
+                    mot, n, methode = user_input.split()
+                    n = int(n)
+                    methode = int(methode)
+
+                    resultats = Prediction.predire(moteur, mot, n, methode)
+
+                    if resultats:
+                        print(f"\n🔍 Les {n} synonymes de '{mot}' sont:")
+                        for i, (synonyme, score) in enumerate(resultats, 1):
+                            print(f"{i}. {synonyme} -> {score}")
+                    else:
+                        print("Aucun synonyme trouvé.")
+
+                except ValueError:
+                    print("❌ Erreur: format attendu -> mot nombre méthode (ex: chat 5 0)")
+                except Exception as e:
+                    print(f"❌ Erreur pendant la prédiction : {e}")
         else:
-            print("Erreur : L'option -t est obligatoire avec -p")
+            print("❌ Erreur : -t est requis avec -p.")
     else:
-        print("Aucune option valide fournie. Utilisez -e, -p ou -b.")
+        print("❌ Aucune option valide fournie. Utilisez -e, -p ou -b.")
 
 if __name__ == "__main__":
     main()

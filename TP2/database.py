@@ -1,135 +1,132 @@
+import os
 import sqlite3
 
 # CONSTANTES
-CHEMINBD = 'database.db'
+CHEMINBD = os.path.join(os.path.dirname(__file__), "cooccurrence.db")
 
-# REQUETES
-CLES_ETRANGERES = '''PRAGMA foreign_keys = ON;'''
+# REQUÊTES SQL
+CLES_ETRANGERES = 'PRAGMA foreign_keys = ON;'
 
-CREATE_ENTRAINEMENTS = '''
-CREATE TABLE IF NOT EXISTS Entrainements (
-    id_entrainement INTEGER PRIMARY KEY,
-    nom_fichier TEXT NOT NULL,
-    taille_fenetre INTEGER NOT NULL
+CREATE_LEXIQUE = """
+CREATE TABLE IF NOT EXISTS lexique (
+    id INTEGER PRIMARY KEY,
+    mot TEXT UNIQUE NOT NULL
 );
-'''
+"""
 
-CREATE_LEXIQUE = '''
-CREATE TABLE IF NOT EXISTS Lexique (
-    id_mot INTEGER PRIMARY KEY AUTOINCREMENT,
-    mot TEXT NOT NULL,
-    id_entrainement INTEGER,
-    FOREIGN KEY (id_entrainement) REFERENCES Entrainements(id_entrainement)
+CREATE_INDEX_LEXIQUE_MOT1 = """
+CREATE INDEX IF NOT EXISTS idx_lexique_mot ON lexique(mot);
+"""
+
+CREATE_COOCCURRENCES = """
+CREATE TABLE IF NOT EXISTS cooccurrence (
+    id INTEGER PRIMARY KEY,
+    mot1_id INTEGER NOT NULL,
+    mot2_id INTEGER NOT NULL,
+    taille_fenetre INTEGER NOT NULL,
+    frequence INTEGER NOT NULL DEFAULT 1,
+    FOREIGN KEY (mot1_id) REFERENCES lexique(id),
+    FOREIGN KEY (mot2_id) REFERENCES lexique(id),
+    UNIQUE(mot1_id, mot2_id, taille_fenetre)
 );
-'''
+"""
 
-CREATE_COOCCURRENCES = '''
-CREATE TABLE IF NOT EXISTS Cooccurrences (
-    id_mot1 INTEGER,
-    id_mot2 INTEGER,
-    id_entrainement INTEGER,
-    nombre_occurrences REAL NOT NULL,
-    PRIMARY KEY (id_mot1, id_mot2, id_entrainement),
-    FOREIGN KEY (id_mot1) REFERENCES Lexique(id_mot),
-    FOREIGN KEY (id_mot2) REFERENCES Lexique(id_mot),
-    FOREIGN KEY (id_entrainement) REFERENCES Entrainements(id_entrainement)
-);
-'''
+CREATE_INDEX_COOCCURRENCE = """
+CREATE INDEX IF NOT EXISTS idx_cooccurrence_mot1 ON cooccurrence(mot1_id);
+"""
+CREATE_INDEX_LEXIQUE_MOT2 = """
+CREATE INDEX IF NOT EXISTS idx_cooccurrence_mot2 ON cooccurrence(mot2_id);
+"""
+CREATE_INDEX_COOCCURRENCE_COMPOUND = """
+CREATE INDEX IF NOT EXISTS idx_cooccurrence_compound ON cooccurrence(mot1_id, mot2_id, taille_fenetre);
+"""
+CREATE_INDEX_COOCCURRENCE_FREQUENCE = """
+CREATE INDEX IF NOT EXISTS idx_cooccurrence_freq ON cooccurrence(mot1_id, frequence DESC);
+"""
 
-class Database():
-    def __init__(self, chemin = CHEMINBD):
-        self.chemin = CHEMINBD
-    
+DROP_TABLE_LEXIQUE = "DROP TABLE IF EXISTS lexique;"
+DROP_TABLE_COOCCURRENCE = "DROP TABLE IF EXISTS cooccurrence;"
+
+class Database:
+    def __init__(self, chemin=CHEMINBD):
+        self.chemin = chemin
+
     def creer_connexion(self):
         self.connexion = sqlite3.connect(self.chemin)
         self.curseur = self.connexion.cursor()
         self.curseur.execute(CLES_ETRANGERES)
-    
+
     def fermer_connexion(self):
         self.curseur.close()
         self.connexion.close()
 
-    def regenerer_db():
-        with sqlite3.connect("cooccurrence.db") as conn:
+    def regenerer_db(self):
+        with sqlite3.connect(self.chemin) as conn:
             cursor = conn.cursor()
-
-            # Drop existing tables if they exist
-            cursor.execute("DROP TABLE IF EXISTS cooccurrence")
-            cursor.execute("DROP TABLE IF EXISTS lexique")
-
-            # Recreate tables
-            cursor.execute("""
-                CREATE TABLE lexique (
-                    id INTEGER PRIMARY KEY,
-                    mot TEXT UNIQUE NOT NULL
-                )
-            """)
-            cursor.execute("""
-                CREATE TABLE cooccurrence (
-                    id INTEGER PRIMARY KEY,
-                    mot1_id INTEGER NOT NULL,
-                    mot2_id INTEGER NOT NULL,
-                    taille_fenetre INTEGER NOT NULL,
-                    frequence INTEGER NOT NULL DEFAULT 1,
-                    FOREIGN KEY (mot1_id) REFERENCES lexique(id),
-                    FOREIGN KEY (mot2_id) REFERENCES lexique(id)
-                )
-            """)
-
+            cursor.execute(CLES_ETRANGERES)
+            cursor.execute(DROP_TABLE_COOCCURRENCE)
+            cursor.execute(DROP_TABLE_LEXIQUE)
+            cursor.execute(CREATE_LEXIQUE)
+            cursor.execute(CREATE_INDEX_LEXIQUE_MOT1)
+            cursor.execute(CREATE_COOCCURRENCES)
+            cursor.execute(CREATE_INDEX_COOCCURRENCE)
+            cursor.execute(CREATE_INDEX_COOCCURRENCE_COMPOUND)
+            cursor.execute(CREATE_INDEX_COOCCURRENCE_FREQUENCE)
+            cursor.execute(CREATE_INDEX_LEXIQUE_MOT2)
             conn.commit()
 
-            print("✅ Base de données régénérée avec succès.")
-            
-    def generer_bd(self):
-        pass
-
-    def get_or_create_word_id(self, word):
-        self.cursor.execute('SELECT id FROM Lexique WHERE mot = ?', (word,))
-        result = self.cursor.fetchone()
-        if result:
-            return result[0]
-        self.cursor.execute('INSERT INTO Lexique (mot) VALUES (?)', (word,))
-        self.conn.commit()
-        return self.cursor.lastrowid
-    
-    def inserer_bd(self, mot1, mot2, taille_fenetre, count):
-        # Regarder si la valeur est à 0 (pas de cooccurrence)
-        if count == 0:
-            return
+    def get_or_create_mot_id(self, mot, conn=None):
+        close_conn = False
+        if conn is None:
+            conn = sqlite3.connect(self.chemin)
+            close_conn = True
         
-        word1_id = self.get_or_create_word_id(mot1)
-        word2_id = self.get_or_create_word_id(mot2)
-
-        # Check if this cooccurrence already exists (for this window size)
-        self.cursor.execute('''
-            SELECT id, count FROM Cooccurrences
-            WHERE mot1_id = ? AND mot2_id = ? AND taille_fenetre = ?
-        ''', (word1_id, word2_id, taille_fenetre))
-        result = self.cursor.fetchone()
-
-        if result:
-            # Update existing count
-            cooc_id, existant_count = result
-            self.cursor.execute('''
-                UPDATE Cooccurrences SET count = ?
-                WHERE id = ?
-            ''', (existant_count + count, cooc_id))
+        cursor = conn.cursor()
+        cursor.execute("SELECT id FROM lexique WHERE mot = ?", (mot,))
+        row = cursor.fetchone()
+        if row:
+            result = row[0]
         else:
-            # Insert new cooccurrence
-            self.cursor.execute('''
-                INSERT INTO Cooccurrences (mot1_id, mot2_id, taille_fenetre, count)
-                VALUES (?, ?, ?, ?)
-            ''', (word1_id, word2_id, taille_fenetre, count))
+            cursor.execute("INSERT INTO lexique (mot) VALUES (?)", (mot,))
+            conn.commit()
+            result = cursor.lastrowid
+        
+        if close_conn:
+            cursor.close()
+            conn.close()
+            
+        return result
 
-        self.conn.commit()
+    def inserer_ou_mettre_a_jour_cooccurrence(self, mot1_id, mot2_id, taille_fenetre, frequence, conn=None):
+        close_conn = False
+        if conn is None:
+            conn = sqlite3.connect(self.chemin)
+            close_conn = True
+        
+        cursor = conn.cursor()
+        cursor.execute("""
+            UPDATE cooccurrence
+            SET frequence = frequence + ?
+            WHERE mot1_id = ? AND mot2_id = ? AND taille_fenetre = ?
+        """, (frequence, mot1_id, mot2_id, taille_fenetre))
+        if cursor.rowcount == 0:
+            cursor.execute("""
+                INSERT INTO cooccurrence (mot1_id, mot2_id, taille_fenetre, frequence)
+                VALUES (?, ?, ?, ?)
+            """, (mot1_id, mot2_id, taille_fenetre, frequence))
+        
+        if close_conn:
+            conn.commit()
+            cursor.close()
+            conn.close()
+        
+        return cursor.rowcount
 
     def imprimer_table(self, table, requete):
+        self.creer_connexion()
         print(f"Table {table}")
         self.curseur.execute(requete)
         for ligne in self.curseur.fetchall():
             print(ligne)
         print()
-    
-    def imprimer(self):
-        pass
-    
+        self.fermer_connexion()

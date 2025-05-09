@@ -2,7 +2,7 @@
 
 ## Clustering de cooccurrences
 
-Ce projet implémente un pipeline complet de construction de lexique, d’entraînement de modèles de cooccurrence et de clustering (K‑means) selon les exigences du TP3 de votre cours.
+Ce projet implémente un pipeline complet de construction de lexique, d’entraînement de modèles de cooccurrence et de clustering (K‑means) selon les exigences du cours de données, mégadonnées et intelligence artificielle II.
 
 ---
 

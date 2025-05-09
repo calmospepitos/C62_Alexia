@@ -2,7 +2,7 @@
 
 ## Clustering de cooccurrences
 
-Ce projet implémente un pipeline complet de construction de lexique, d’entraînement de modèles de cooccurrence et de clustering (K‑means) selon les exigences du TP3 de votre cours.
+Ce projet implémente un pipeline complet de construction de lexique, d’entraînement de modèles de cooccurrence et de clustering (K‑means) selon les exigences du cours de données, mégadonnées et intelligence artificielle II.
 
 ---
 
@@ -35,8 +35,8 @@ TP3/
 ├── entrainement_bd.py # (TP2) version BD directe
 ├── prediction.py      # module de prédiction (TP2)
 ├── texts/             # dossiers contenant vos 4 fichiers text1.txt…text4.txt
-└── tests/             # traces de vos expériences (à générer)
-README.md          # ce fichier
+├── tests/             # traces de vos expériences (à générer)
+└── README.md          # ce fichier
 ```
 
 ---

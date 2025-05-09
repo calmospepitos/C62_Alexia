@@ -1,0 +1,269 @@
+Itération 1 : 0.38 secondes. 33170 migrations.
+Partition 0	: 7128.0 mots
+Partition 1	: 3090.0 mots
+Partition 2	: 3989.0 mots
+Partition 3	: 10029.0 mots
+Partition 4	: 8934.0 mots
+
+****************************************
+
+Itération 2 : 0.38 secondes. 8388 migrations.
+Partition 0	: 6620.0 mots
+Partition 1	: 5793.0 mots
+Partition 2	: 4029.0 mots
+Partition 3	: 7401.0 mots
+Partition 4	: 9327.0 mots
+
+****************************************
+
+Itération 3 : 0.39 secondes. 5041 migrations.
+Partition 0	: 5952.0 mots
+Partition 1	: 6651.0 mots
+Partition 2	: 3755.0 mots
+Partition 3	: 6560.0 mots
+Partition 4	: 10252.0 mots
+
+****************************************
+
+Itération 4 : 0.84 secondes. 3865 migrations.
+Partition 0	: 5282.0 mots
+Partition 1	: 6460.0 mots
+Partition 2	: 3642.0 mots
+Partition 3	: 6197.0 mots
+Partition 4	: 11589.0 mots
+
+****************************************
+
+Itération 5 : 0.45 secondes. 1862 migrations.
+Partition 0	: 4951.0 mots
+Partition 1	: 7017.0 mots
+Partition 2	: 3704.0 mots
+Partition 3	: 6010.0 mots
+Partition 4	: 11488.0 mots
+
+****************************************
+
+Itération 6 : 0.41 secondes. 887 migrations.
+Partition 0	: 4793.0 mots
+Partition 1	: 7377.0 mots
+Partition 2	: 3738.0 mots
+Partition 3	: 5922.0 mots
+Partition 4	: 11340.0 mots
+
+****************************************
+
+Itération 7 : 0.42 secondes. 514 migrations.
+Partition 0	: 4715.0 mots
+Partition 1	: 7614.0 mots
+Partition 2	: 3744.0 mots
+Partition 3	: 5854.0 mots
+Partition 4	: 11243.0 mots
+
+****************************************
+
+Itération 8 : 0.42 secondes. 347 migrations.
+Partition 0	: 4682.0 mots
+Partition 1	: 7764.0 mots
+Partition 2	: 3733.0 mots
+Partition 3	: 5799.0 mots
+Partition 4	: 11192.0 mots
+
+****************************************
+
+Itération 9 : 0.39 secondes. 303 migrations.
+Partition 0	: 4652.0 mots
+Partition 1	: 7859.0 mots
+Partition 2	: 3711.0 mots
+Partition 3	: 5763.0 mots
+Partition 4	: 11185.0 mots
+
+****************************************
+
+Itération 10 : 0.38 secondes. 257 migrations.
+Partition 0	: 4640.0 mots
+Partition 1	: 7913.0 mots
+Partition 2	: 3644.0 mots
+Partition 3	: 5743.0 mots
+Partition 4	: 11230.0 mots
+
+****************************************
+
+Itération 11 : 0.38 secondes. 227 migrations.
+Partition 0	: 4643.0 mots
+Partition 1	: 7944.0 mots
+Partition 2	: 3593.0 mots
+Partition 3	: 5725.0 mots
+Partition 4	: 11265.0 mots
+
+****************************************
+
+Itération 12 : 0.38 secondes. 147 migrations.
+Partition 0	: 4636.0 mots
+Partition 1	: 7978.0 mots
+Partition 2	: 3575.0 mots
+Partition 3	: 5715.0 mots
+Partition 4	: 11266.0 mots
+
+****************************************
+
+Itération 13 : 0.47 secondes. 94 migrations.
+Partition 0	: 4640.0 mots
+Partition 1	: 8002.0 mots
+Partition 2	: 3552.0 mots
+Partition 3	: 5708.0 mots
+Partition 4	: 11268.0 mots
+
+****************************************
+
+Itération 14 : 0.42 secondes. 61 migrations.
+Partition 0	: 4647.0 mots
+Partition 1	: 8024.0 mots
+Partition 2	: 3536.0 mots
+Partition 3	: 5706.0 mots
+Partition 4	: 11257.0 mots
+
+****************************************
+
+Itération 15 : 0.40 secondes. 34 migrations.
+Partition 0	: 4653.0 mots
+Partition 1	: 8039.0 mots
+Partition 2	: 3522.0 mots
+Partition 3	: 5702.0 mots
+Partition 4	: 11254.0 mots
+
+****************************************
+
+Itération 16 : 0.44 secondes. 21 migrations.
+Partition 0	: 4658.0 mots
+Partition 1	: 8047.0 mots
+Partition 2	: 3516.0 mots
+Partition 3	: 5697.0 mots
+Partition 4	: 11252.0 mots
+
+****************************************
+
+Itération 17 : 0.41 secondes. 18 migrations.
+Partition 0	: 4661.0 mots
+Partition 1	: 8054.0 mots
+Partition 2	: 3506.0 mots
+Partition 3	: 5695.0 mots
+Partition 4	: 11254.0 mots
+
+****************************************
+
+Itération 18 : 0.41 secondes. 13 migrations.
+Partition 0	: 4661.0 mots
+Partition 1	: 8063.0 mots
+Partition 2	: 3501.0 mots
+Partition 3	: 5692.0 mots
+Partition 4	: 11253.0 mots
+
+****************************************
+
+Itération 19 : 0.40 secondes. 7 migrations.
+Partition 0	: 4662.0 mots
+Partition 1	: 8069.0 mots
+Partition 2	: 3501.0 mots
+Partition 3	: 5690.0 mots
+Partition 4	: 11248.0 mots
+
+****************************************
+
+Itération 20 : 0.48 secondes. 1 migrations.
+Partition 0	: 4662.0 mots
+Partition 1	: 8070.0 mots
+Partition 2	: 3501.0 mots
+Partition 3	: 5690.0 mots
+Partition 4	: 11247.0 mots
+
+****************************************
+
+Itération 21 : 0.50 secondes. 2 migrations.
+Partition 0	: 4662.0 mots
+Partition 1	: 8071.0 mots
+Partition 2	: 3502.0 mots
+Partition 3	: 5690.0 mots
+Partition 4	: 11245.0 mots
+
+****************************************
+
+Itération 22 : 0.51 secondes. 2 migrations.
+Partition 0	: 4662.0 mots
+Partition 1	: 8072.0 mots
+Partition 2	: 3501.0 mots
+Partition 3	: 5690.0 mots
+Partition 4	: 11245.0 mots
+
+****************************************
+
+Itération 23 : 0.50 secondes. 0 migrations.
+Partition 0	: 4662.0 mots
+Partition 1	: 8072.0 mots
+Partition 2	: 3501.0 mots
+Partition 3	: 5690.0 mots
+Partition 4	: 11245.0 mots
+
+****************************************
+
+Partitionnement en 11.13 secondes.
+
+Partition 0	:
+	porte -> 0.439969
+	tête -> 0.453833
+	reine -> 0.453963
+	nuit -> 0.455920
+	compagnie -> 0.455960
+	mer -> 0.457029
+	fosse -> 0.458614
+	peau -> 0.458660
+	main -> 0.459602
+	fenêtre -> 0.463303
+
+Partition 1	:
+	montsou -> 0.456909
+	grands -> 0.463805
+	fonte -> 0.465525
+	coups -> 0.468131
+	nouveaux -> 0.475380
+	nouveau -> 0.476898
+	la -> 0.477167
+	diamants -> 0.480171
+	choux -> 0.483561
+	fer -> 0.488692
+
+Partition 2	:
+	arbre -> 0.618028
+	eux -> 0.629108
+	œil -> 0.633809
+	oiseau -> 0.635492
+	ordinaire -> 0.636515
+	coup -> 0.638979
+	indigne -> 0.641627
+	enfant -> 0.644407
+	bond -> 0.647909
+	oeil -> 0.650273
+
+Partition 3	:
+	vieux -> 0.534472
+	combat -> 0.540375
+	feu -> 0.544645
+	ventre -> 0.545143
+	chemin -> 0.549140
+	secret -> 0.551036
+	premier -> 0.551339
+	sort -> 0.551497
+	roi -> 0.553560
+	vent -> 0.558118
+
+Partition 4	:
+	several -> 0.277841
+	usually -> 0.277841
+	award -> 0.277841
+	00 -> 0.277841
+	dollar -> 0.277841
+	1991 -> 0.277841
+	1994 -> 0.277841
+	1000 -> 0.277841
+	1997 -> 0.277841
+	1500 -> 0.277841
+

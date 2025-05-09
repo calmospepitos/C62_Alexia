@@ -35,8 +35,8 @@ TP3/
 ├── entrainement_bd.py # (TP2) version BD directe
 ├── prediction.py      # module de prédiction (TP2)
 ├── texts/             # dossiers contenant vos 4 fichiers text1.txt…text4.txt
-└── tests/             # traces de vos expériences (à générer)
-README.md          # ce fichier
+├── tests/             # traces de vos expériences (à générer)
+└── README.md          # ce fichier
 ```
 
 ---
